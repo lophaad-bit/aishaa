@@ -182,26 +182,27 @@ tailwind.config = {
   #offlineOverlay .ol-dot:nth-child(3){animation-delay:.4s;}
   @keyframes olBlink{0%,80%,100%{opacity:.2}40%{opacity:1}}
 
-  /* ── PWA INSTALL BANNER ───────────────────────── */
-  #installBanner { position:fixed;bottom:0;left:0;right:0;z-index:1500;padding:0 0 env(safe-area-inset-bottom,0);transform:translateY(100%);transition:transform .4s cubic-bezier(.22,1,.36,1); }
-  #installBanner.visible { transform:translateY(0); }
-  #installBanner .ib-inner { background:var(--surface);border-top:1px solid var(--outline-var);padding:14px 16px 18px;display:flex;align-items:center;gap:14px;box-shadow:0 -8px 32px rgba(0,0,0,.18); }
-  #installBanner .ib-icon { width:52px;height:52px;border-radius:14px;overflow:hidden;flex-shrink:0;background:var(--surface-cont); }
-  #installBanner .ib-icon img { width:100%;height:100%;object-fit:cover;display:block; }
-  #installBanner .ib-text { flex:1;min-width:0; }
-  #installBanner .ib-title { font-size:14px;font-weight:700;color:var(--on-surface);margin-bottom:2px; }
-  #installBanner .ib-sub { font-size:12px;color:var(--on-surface-var);line-height:1.4; }
-  #installBanner .ib-install { background:var(--primary);color:var(--on-primary);border:none;border-radius:99px;padding:9px 18px;font-size:13px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:opacity .15s; }
-  #installBanner .ib-install:active { opacity:.8; }
-  #installBanner .ib-dismiss { position:absolute;top:10px;right:12px;background:none;border:none;cursor:pointer;color:var(--on-surface-var);padding:4px;display:flex;align-items:center;justify-content:center; }
-  /* iOS-specific instruction banner */
-  #iosInstallBanner { position:fixed;bottom:0;left:0;right:0;z-index:1500;transform:translateY(100%);transition:transform .4s cubic-bezier(.22,1,.36,1); }
-  #iosInstallBanner.visible { transform:translateY(0); }
-  #iosInstallBanner .iib-inner { background:var(--surface);border-top:1px solid var(--outline-var);padding:16px 20px 24px;text-align:center;position:relative;box-shadow:0 -8px 32px rgba(0,0,0,.18); }
-  #iosInstallBanner .iib-close { position:absolute;top:10px;right:12px;background:none;border:none;cursor:pointer;color:var(--on-surface-var);padding:4px;display:flex;align-items:center;justify-content:center; }
-  #iosInstallBanner .iib-title { font-size:14px;font-weight:700;color:var(--on-surface);margin-bottom:6px; }
-  #iosInstallBanner .iib-desc { font-size:13px;color:var(--on-surface-var);line-height:1.6; }
-  #iosInstallBanner .iib-desc b { color:var(--on-surface); }
+  /* ── PWA INSTALL BANNER (Facebook-style) ─────── */
+  #pwaBar { position:fixed;bottom:0;left:0;right:0;z-index:1500;background:var(--surface);border-top:1px solid var(--outline-var);padding:10px 12px calc(10px + env(safe-area-inset-bottom,0));display:none;align-items:center;gap:10px; }
+  #pwaBar.visible { display:flex; }
+  #pwaBar .pb-close { background:none;border:none;cursor:pointer;color:var(--on-surface-var);padding:6px;display:flex;align-items:center;flex-shrink:0; }
+  #pwaBar .pb-icon { width:44px;height:44px;border-radius:10px;overflow:hidden;flex-shrink:0; }
+  #pwaBar .pb-icon img { width:100%;height:100%;object-fit:cover;display:block; }
+  #pwaBar .pb-text { flex:1;min-width:0;overflow:hidden; }
+  #pwaBar .pb-name { font-size:14px;font-weight:700;color:var(--on-surface);white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+  #pwaBar .pb-sub { font-size:11px;color:var(--on-surface-var);margin-top:1px; }
+  #pwaBar .pb-btn { background:var(--primary);color:var(--on-primary);border:none;border-radius:99px;padding:8px 18px;font-size:13px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;flex-shrink:0;transition:opacity .15s; }
+  #pwaBar .pb-btn:active { opacity:.8; }
+  /* iOS banner */
+  #iosPwaBar { position:fixed;bottom:0;left:0;right:0;z-index:1500;background:var(--surface);border-top:1px solid var(--outline-var);padding:12px 16px calc(16px + env(safe-area-inset-bottom,0));display:none;flex-direction:column;align-items:center;gap:6px;text-align:center; }
+  #iosPwaBar.visible { display:flex; }
+  #iosPwaBar .ipb-close { position:absolute;top:10px;right:12px;background:none;border:none;cursor:pointer;color:var(--on-surface-var);padding:4px;display:flex; }
+  #iosPwaBar .ipb-row { display:flex;align-items:center;gap:10px; }
+  #iosPwaBar .ipb-icon { width:40px;height:40px;border-radius:9px;overflow:hidden;flex-shrink:0; }
+  #iosPwaBar .ipb-icon img { width:100%;height:100%;object-fit:cover;display:block; }
+  #iosPwaBar .ipb-name { font-size:14px;font-weight:700;color:var(--on-surface); }
+  #iosPwaBar .ipb-desc { font-size:12px;color:var(--on-surface-var);line-height:1.5; }
+  #iosPwaBar .ipb-desc b { color:var(--on-surface); }
 </style>
 </head>
 <body>
@@ -338,32 +339,29 @@ tailwind.config = {
   </div>
 </div>
 
-<!-- PWA INSTALL BANNER (Android/Chrome) -->
-<div id="installBanner">
-  <div class="ib-inner">
-    <div class="ib-icon"><img src="/icon-192.png" alt="Aisha"></div>
-    <div class="ib-text">
-      <div class="ib-title">Add Aisha to Home Screen</div>
-      <div class="ib-sub">Install for the best experience — works offline</div>
-    </div>
-    <button class="ib-install" onclick="doInstallPWA()">Install</button>
-    <button class="ib-dismiss" onclick="dismissInstallBanner()" aria-label="Dismiss">
-      <span class="material-symbols-outlined" style="font-size:20px">close</span>
-    </button>
+<!-- PWA BAR (Android/Chrome — Facebook style) -->
+<div id="pwaBar">
+  <button class="pb-close" onclick="dismissPWA()" aria-label="Close">
+    <span class="material-symbols-outlined" style="font-size:20px">close</span>
+  </button>
+  <div class="pb-icon"><img src="/icon-192.png" alt="Aisha"></div>
+  <div class="pb-text">
+    <div class="pb-name">Aisha</div>
+    <div class="pb-sub">Get the app — faster &amp; works offline</div>
   </div>
+  <button class="pb-btn" onclick="doInstallPWA()">Install</button>
 </div>
 
-<!-- iOS INSTALL BANNER -->
-<div id="iosInstallBanner">
-  <div class="iib-inner">
-    <button class="iib-close" onclick="dismissIOSBanner()" aria-label="Dismiss">
-      <span class="material-symbols-outlined" style="font-size:20px">close</span>
-    </button>
-    <div class="iib-title">Add Aisha to Home Screen</div>
-    <div class="iib-desc">
-      Tap <b>Share</b> <span style="font-size:15px">⎙</span> then <b>"Add to Home Screen"</b> to install this app.
-    </div>
+<!-- iOS PWA BAR -->
+<div id="iosPwaBar">
+  <button class="ipb-close" onclick="dismissIOSPwa()" aria-label="Close">
+    <span class="material-symbols-outlined" style="font-size:20px">close</span>
+  </button>
+  <div class="ipb-row">
+    <div class="ipb-icon"><img src="/icon-192.png" alt="Aisha"></div>
+    <div class="ipb-name">Get the Aisha app</div>
   </div>
+  <div class="ipb-desc">Tap <b>Share ⎙</b> then <b>"Add to Home Screen"</b></div>
 </div>
 
 <!-- LIGHTBOX -->
@@ -574,7 +572,7 @@ function makeCard(photo, unlocked) {
   const isU = unlocked.includes(photo.id);
   const isL = userLikes.includes(photo.id);
   const isS = userSaved.includes(photo.id);
-  const cnt = photo.likes || 0;
+  const cnt = photo.likes > 0 ? photo.likes : '';
   const src = imgUrl(photo.storage_path);
 
   const art = document.createElement('article');
@@ -752,8 +750,8 @@ async function handleLike(btn) {
     b.classList.toggle('icon-active', nowLiked);
     const cnt = b.nextElementSibling;
     if (cnt?.classList.contains('like-count')) {
-      const updatedCount = Math.max(0, parseInt(cnt.textContent || '0') + (nowLiked ? 1 : -1));
-      cnt.textContent = updatedCount;
+      const updatedCount = Math.max(0, (parseInt(cnt.textContent) || 0) + (nowLiked ? 1 : -1));
+      cnt.textContent = updatedCount > 0 ? updatedCount : '';
       // Also update the "Liked by X others" line in the same card
       const card = b.closest('.post-card');
       if (card) {
@@ -1112,25 +1110,23 @@ init();
   window.addEventListener('online',  hideOffline);
 })();
 
-// ── PWA INSTALL BANNER ─────────────────────────
+// ── PWA INSTALL BAR ────────────────────────────
 (function () {
-  // Don't show if already installed (running in standalone/fullscreen)
+  // Never show if already installed (standalone / fullscreen mode)
   const isInstalled = window.matchMedia('(display-mode: standalone)').matches
     || window.navigator.standalone === true;
   if (isInstalled) return;
 
-  const DISMISSED_KEY = 'aisha_install_dismissed';
+  const KEY = 'aisha_pwa_dismissed';
+  if (localStorage.getItem(KEY)) return;
 
-  // ── Android / Chrome — beforeinstallprompt ──
   let deferredPrompt = null;
+
+  // Android / Chrome ── beforeinstallprompt fires automatically
   window.addEventListener('beforeinstallprompt', e => {
     e.preventDefault();
     deferredPrompt = e;
-    if (!localStorage.getItem(DISMISSED_KEY)) {
-      setTimeout(() => {
-        document.getElementById('installBanner').classList.add('visible');
-      }, 3000); // slight delay so it doesn't appear instantly on load
-    }
+    setTimeout(() => document.getElementById('pwaBar').classList.add('visible'), 2500);
   });
 
   window.doInstallPWA = async function () {
@@ -1138,35 +1134,31 @@ init();
     deferredPrompt.prompt();
     const { outcome } = await deferredPrompt.userChoice;
     deferredPrompt = null;
-    document.getElementById('installBanner').classList.remove('visible');
-    if (outcome === 'accepted') {
-      localStorage.setItem(DISMISSED_KEY, '1');
-    }
+    document.getElementById('pwaBar').classList.remove('visible');
+    localStorage.setItem(KEY, '1');
   };
 
-  window.dismissInstallBanner = function () {
-    document.getElementById('installBanner').classList.remove('visible');
-    localStorage.setItem(DISMISSED_KEY, '1');
+  window.dismissPWA = function () {
+    document.getElementById('pwaBar').classList.remove('visible');
+    localStorage.setItem(KEY, '1');
   };
 
-  // ── iOS Safari — no beforeinstallprompt, show manual instructions ──
+  // iOS Safari ── no beforeinstallprompt; show manual hint
   const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
   const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-  if (isIOS && isSafari && !localStorage.getItem(DISMISSED_KEY)) {
-    setTimeout(() => {
-      document.getElementById('iosInstallBanner').classList.add('visible');
-    }, 4000);
+  if (isIOS && isSafari) {
+    setTimeout(() => document.getElementById('iosPwaBar').classList.add('visible'), 3000);
   }
 
-  window.dismissIOSBanner = function () {
-    document.getElementById('iosInstallBanner').classList.remove('visible');
-    localStorage.setItem(DISMISSED_KEY, '1');
+  window.dismissIOSPwa = function () {
+    document.getElementById('iosPwaBar').classList.remove('visible');
+    localStorage.setItem(KEY, '1');
   };
 
-  // Hide banner once installed
+  // Auto-hide once user installs
   window.addEventListener('appinstalled', () => {
-    document.getElementById('installBanner').classList.remove('visible');
-    localStorage.setItem(DISMISSED_KEY, '1');
+    document.getElementById('pwaBar').classList.remove('visible');
+    localStorage.setItem(KEY, '1');
   });
 })();
 
