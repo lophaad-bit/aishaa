@@ -128,5 +128,15 @@ module.exports = async function handler(req, res) {
     return res.json({ ok: true, msg: 'Photo deleted.' });
   }
 
+  // ── GET USERS ────────────────────────────────────────
+  if (action === 'get_users') {
+    const { data, error } = await sb
+      .from('profiles')
+      .select('username, email, likes, saved, joined')
+      .order('joined', { ascending: false });
+    if (error) return res.status(500).json({ ok: false, msg: error.message });
+    return res.json({ ok: true, users: data || [] });
+  }
+
   return res.status(400).json({ ok: false, msg: 'Unknown action: ' + action });
 };
