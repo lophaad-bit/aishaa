@@ -1,0 +1,12 @@
+╔══════════════════════════════════════════════════════════╗
+║   VERCEL ENVIRONMENT VARIABLES — copy these exactly      ║
+║   Vercel → Project Settings → Environment Variables      ║
+╚══════════════════════════════════════════════════════════╝
+
+Variable Name              │  Value
+───────────────────────────┼──────────────────────────────────────────────────────────────
+SUPABASE_URL               │  https://havyahjklvinraoamcat.supabase.co
+SUPABASE_SERVICE_ROLE_KEY  │  sb_secret_ZpdjTrML9KD1-r6C7LCV9Q_tJUf1SU7
+ADMIN_PASS                 │  8822245103@testprime
+
+After adding all 3 variables → click Save → go to Deployments → Redeploy
