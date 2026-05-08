@@ -166,6 +166,42 @@ tailwind.config = {
   .admin-ref { display:flex;align-items:center;justify-content:center;gap:6px;color:var(--on-surface-var);font-size:12px;text-decoration:none;padding:16px;opacity:.4; }
   img { -webkit-user-drag:none;user-select:none; }
   .loading-spinner { text-align:center;padding:48px 20px;color:var(--on-surface-var);font-size:14px; }
+
+  /* ── OFFLINE OVERLAY ──────────────────────────── */
+  #offlineOverlay { position:fixed;inset:0;z-index:2000;background:#111;display:none;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;text-align:center;gap:0; }
+  #offlineOverlay .ol-logo { font-family:'Grand Hotel',cursive;font-size:30px;color:#fff;margin-bottom:44px;opacity:.9; }
+  #offlineOverlay .ol-icon-wrap { width:88px;height:88px;border-radius:50%;border:1.5px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);display:flex;align-items:center;justify-content:center;margin:0 auto 24px;animation:olPulse 2.5s ease-in-out infinite; }
+  @keyframes olPulse{0%,100%{box-shadow:0 0 0 0 rgba(255,255,255,.1)}50%{box-shadow:0 0 0 16px rgba(255,255,255,0)}}
+  #offlineOverlay h2 { font-size:20px;font-weight:700;color:#fff;margin-bottom:8px; }
+  #offlineOverlay p { font-size:14px;color:rgba(255,255,255,.5);line-height:1.6;max-width:260px;margin:0 auto 32px; }
+  #offlineOverlay .ol-retry { background:#fff;color:#111;border:none;border-radius:99px;padding:12px 32px;font-size:14px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;transition:opacity .15s; }
+  #offlineOverlay .ol-retry:active { opacity:.8; }
+  #offlineOverlay .ol-dots { display:flex;gap:6px;margin-top:44px; }
+  #offlineOverlay .ol-dot { width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.2);animation:olBlink 1.4s ease-in-out infinite; }
+  #offlineOverlay .ol-dot:nth-child(2){animation-delay:.2s;}
+  #offlineOverlay .ol-dot:nth-child(3){animation-delay:.4s;}
+  @keyframes olBlink{0%,80%,100%{opacity:.2}40%{opacity:1}}
+
+  /* ── PWA INSTALL BANNER ───────────────────────── */
+  #installBanner { position:fixed;bottom:0;left:0;right:0;z-index:1500;padding:0 0 env(safe-area-inset-bottom,0);transform:translateY(100%);transition:transform .4s cubic-bezier(.22,1,.36,1); }
+  #installBanner.visible { transform:translateY(0); }
+  #installBanner .ib-inner { background:var(--surface);border-top:1px solid var(--outline-var);padding:14px 16px 18px;display:flex;align-items:center;gap:14px;box-shadow:0 -8px 32px rgba(0,0,0,.18); }
+  #installBanner .ib-icon { width:52px;height:52px;border-radius:14px;overflow:hidden;flex-shrink:0;background:var(--surface-cont); }
+  #installBanner .ib-icon img { width:100%;height:100%;object-fit:cover;display:block; }
+  #installBanner .ib-text { flex:1;min-width:0; }
+  #installBanner .ib-title { font-size:14px;font-weight:700;color:var(--on-surface);margin-bottom:2px; }
+  #installBanner .ib-sub { font-size:12px;color:var(--on-surface-var);line-height:1.4; }
+  #installBanner .ib-install { background:var(--primary);color:var(--on-primary);border:none;border-radius:99px;padding:9px 18px;font-size:13px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:opacity .15s; }
+  #installBanner .ib-install:active { opacity:.8; }
+  #installBanner .ib-dismiss { position:absolute;top:10px;right:12px;background:none;border:none;cursor:pointer;color:var(--on-surface-var);padding:4px;display:flex;align-items:center;justify-content:center; }
+  /* iOS-specific instruction banner */
+  #iosInstallBanner { position:fixed;bottom:0;left:0;right:0;z-index:1500;transform:translateY(100%);transition:transform .4s cubic-bezier(.22,1,.36,1); }
+  #iosInstallBanner.visible { transform:translateY(0); }
+  #iosInstallBanner .iib-inner { background:var(--surface);border-top:1px solid var(--outline-var);padding:16px 20px 24px;text-align:center;position:relative;box-shadow:0 -8px 32px rgba(0,0,0,.18); }
+  #iosInstallBanner .iib-close { position:absolute;top:10px;right:12px;background:none;border:none;cursor:pointer;color:var(--on-surface-var);padding:4px;display:flex;align-items:center;justify-content:center; }
+  #iosInstallBanner .iib-title { font-size:14px;font-weight:700;color:var(--on-surface);margin-bottom:6px; }
+  #iosInstallBanner .iib-desc { font-size:13px;color:var(--on-surface-var);line-height:1.6; }
+  #iosInstallBanner .iib-desc b { color:var(--on-surface); }
 </style>
 </head>
 <body>
@@ -288,6 +324,48 @@ tailwind.config = {
   </nav>
 </div>
 
+<!-- OFFLINE OVERLAY -->
+<div id="offlineOverlay">
+  <div class="ol-logo">Aisha</div>
+  <div class="ol-icon-wrap">
+    <span class="material-symbols-outlined" style="font-size:40px;color:rgba(255,255,255,.5);font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 48">wifi_off</span>
+  </div>
+  <h2>You're Offline</h2>
+  <p>No internet connection. Check your connection and try again.</p>
+  <button class="ol-retry" onclick="window.location.reload()">Try again</button>
+  <div class="ol-dots">
+    <div class="ol-dot"></div><div class="ol-dot"></div><div class="ol-dot"></div>
+  </div>
+</div>
+
+<!-- PWA INSTALL BANNER (Android/Chrome) -->
+<div id="installBanner">
+  <div class="ib-inner">
+    <div class="ib-icon"><img src="/icon-192.png" alt="Aisha"></div>
+    <div class="ib-text">
+      <div class="ib-title">Add Aisha to Home Screen</div>
+      <div class="ib-sub">Install for the best experience — works offline</div>
+    </div>
+    <button class="ib-install" onclick="doInstallPWA()">Install</button>
+    <button class="ib-dismiss" onclick="dismissInstallBanner()" aria-label="Dismiss">
+      <span class="material-symbols-outlined" style="font-size:20px">close</span>
+    </button>
+  </div>
+</div>
+
+<!-- iOS INSTALL BANNER -->
+<div id="iosInstallBanner">
+  <div class="iib-inner">
+    <button class="iib-close" onclick="dismissIOSBanner()" aria-label="Dismiss">
+      <span class="material-symbols-outlined" style="font-size:20px">close</span>
+    </button>
+    <div class="iib-title">Add Aisha to Home Screen</div>
+    <div class="iib-desc">
+      Tap <b>Share</b> <span style="font-size:15px">⎙</span> then <b>"Add to Home Screen"</b> to install this app.
+    </div>
+  </div>
+</div>
+
 <!-- LIGHTBOX -->
 <div class="lightbox" id="lightbox">
   <button class="lb-close" onclick="closeLb()"><span class="material-symbols-outlined" style="font-size:22px;color:#fff">close</span></button>
@@ -355,13 +433,15 @@ const SUPABASE_ANON_KEY = 'sb_publishable_2iQW6DDVWX2cKfck5ikY_Q_rpfUJa4K';
 
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-let ALL_PHOTOS   = [];
-let currentUser  = null;
-let currentEmail = null;
-let userLikes    = [];
-let userSaved    = [];
+let ALL_PHOTOS        = [];
+let currentUser       = null;
+let currentEmail      = null;
+let currentUserId     = null;
+let userLikes         = [];
+let userSaved         = [];
 let lbScale = 1, toastT;
 let loadingProfileForId = null;
+let suppressAuthEvent   = false;
 
 function imgUrl(storagePath) {
   return `${SUPABASE_URL}/storage/v1/object/public/photos/${storagePath}`;
@@ -381,10 +461,11 @@ async function init() {
   // AND SIGNED_IN (fires after login). Do NOT await loadProfile here — let
   // photos load in parallel so the spinner always resolves.
   sb.auth.onAuthStateChange((event, session) => {
+    if (suppressAuthEvent) return;
     if ((event === 'SIGNED_IN' || event === 'INITIAL_SESSION') && session) {
       loadProfile(session.user); // intentionally not awaited
     } else if (event === 'SIGNED_OUT') {
-      currentUser = currentEmail = null;
+      currentUser = currentEmail = currentUserId = null;
       userLikes = []; userSaved = [];
       updateNavAvatar(false, '');
     }
@@ -429,7 +510,7 @@ async function init() {
   }
 }
 
-async function loadProfile(user) {
+async function loadProfile(user, goHome = false) {
   // Guard against double calls (onAuthStateChange + doSignIn both triggering)
   if (loadingProfileForId === user.id) return;
   loadingProfileForId = user.id;
@@ -463,12 +544,13 @@ async function loadProfile(user) {
     profile = created || { username, email: user.email, likes: [], saved: [] };
   }
 
-  currentUser  = profile.username;
-  currentEmail = profile.email || user.email;
-  userLikes    = profile.likes || [];
-  userSaved    = profile.saved || [];
+  currentUserId = user.id;
+  currentUser   = profile.username;
+  currentEmail  = profile.email || user.email;
+  userLikes     = profile.likes || [];
+  userSaved     = profile.saved || [];
   loadingProfileForId = null; // reset guard so future sign-ins work
-  onLogin(currentUser, currentEmail, userLikes, userSaved);
+  onLogin(currentUser, currentEmail, userLikes, userSaved, goHome);
 }
 
 // ── UNLOCKED STATE (localStorage) ─────────────
@@ -512,7 +594,7 @@ function makeCard(photo, unlocked) {
       ${isU ? '' : `
       <div class="lock-overlay">
         <div class="lock-ring"><span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24;font-size:28px;">lock</span></div>
-        <span class="lock-lbl">Unlock</span>
+        <span class="lock-lbl">Tap to unlock</span>
       </div>`}
     </div>
     <div class="post-body">
@@ -641,9 +723,7 @@ function applyUnlocked(id) {
 
 // ── LIKE ────────────────────────────────────────
 async function handleLike(btn) {
-  if (!currentUser) { openAuth(); showToast('favorite', 'Sign in to like'); return; }
-  const { data: { user } } = await sb.auth.getUser();
-  if (!user) return;
+  if (!currentUser || !currentUserId) { openAuth(); showToast('favorite', 'Sign in to like'); return; }
 
   const id = btn.dataset.id;
   const liked = userLikes.includes(id);
@@ -653,14 +733,15 @@ async function handleLike(btn) {
 
   const { error: profErr } = await sb.from('profiles')
     .update({ likes: newLikes })
-    .eq('id', user.id);
-  if (profErr) { showToast('error', 'Error'); return; }
+    .eq('id', currentUserId);
+  if (profErr) { showToast('error', 'Error saving like'); return; }
 
-  // Update photo like count
+  // Update photo like count via RPC (bypasses RLS restriction on photos table)
+  const delta = liked ? -1 : 1;
+  const { error: rpcErr } = await sb.rpc('increment_photo_likes', { photo_id: id, delta });
+  if (rpcErr) console.warn('Like count RPC error:', rpcErr.message);
   const photo = ALL_PHOTOS.find(p => p.id === id);
-  const newCount = Math.max(0, (photo?.likes || 0) + (liked ? -1 : 1));
-  await sb.from('photos').update({ likes: newCount }).eq('id', id);
-  if (photo) photo.likes = newCount;
+  if (photo) photo.likes = Math.max(0, (photo.likes || 0) + delta);
 
   userLikes = newLikes;
   const nowLiked = !liked;
@@ -690,9 +771,7 @@ async function handleLike(btn) {
 
 // ── SAVE ────────────────────────────────────────
 async function handleSave(btn) {
-  if (!currentUser) { openAuth(); showToast('bookmark', 'Sign in to save'); return; }
-  const { data: { user } } = await sb.auth.getUser();
-  if (!user) return;
+  if (!currentUser || !currentUserId) { openAuth(); showToast('bookmark', 'Sign in to save'); return; }
 
   const id = btn.dataset.id;
   const saved = userSaved.includes(id);
@@ -702,7 +781,7 @@ async function handleSave(btn) {
 
   const { error } = await sb.from('profiles')
     .update({ saved: newSaved })
-    .eq('id', user.id);
+    .eq('id', currentUserId);
   if (error) { showToast('error', 'Error'); return; }
 
   userSaved = newSaved;
@@ -814,7 +893,7 @@ async function doSignIn() {
   }
 
   if (data?.user) {
-    await loadProfile(data.user);
+    await loadProfile(data.user, true);
     closeAuth();
     showToast('waving_hand', 'Welcome back, ' + (currentUser || 'there') + '!');
   }
@@ -856,14 +935,14 @@ async function doSignUp() {
 
   // If session exists immediately → email confirmation is OFF → auto login
   if (data?.session) {
-    await loadProfile(data.user);
+    await loadProfile(data.user, true);
     closeAuth();
     showToast('celebration', 'Welcome, ' + username + '!');
   } else if (data?.user) {
     // Email confirmation ON — but user created. Try signing in anyway.
     const { data: signInData, error: signInErr } = await sb.auth.signInWithPassword({ email, password: pass });
     if (!signInErr && signInData?.session) {
-      await loadProfile(signInData.user);
+      await loadProfile(signInData.user, true);
       closeAuth();
       showToast('celebration', 'Welcome, ' + username + '!');
     } else {
@@ -895,7 +974,7 @@ async function doLogout() {
   showToast('logout', 'Signed out');
 }
 
-function onLogin(u, email, likes, saved) {
+function onLogin(u, email, likes, saved, goHome = false) {
   currentUser = u; currentEmail = email; userLikes = likes; userSaved = saved;
   updateNavAvatar(true, u);
   document.getElementById('profileUser').style.display = 'block';
@@ -909,7 +988,7 @@ function onLogin(u, email, likes, saved) {
   applyLikedSavedUI(likes, saved);
 
   renderProfileGrids(likes, saved);
-  switchTab('home');
+  if (goHome) switchTab('home');
 }
 
 function applyLikedSavedUI(likes, saved) {
@@ -980,7 +1059,10 @@ async function doChPw() {
   // Re-authenticate then update
   const { data: { user } } = await sb.auth.getUser();
   if (!user) return;
+  // Suppress auth state change so re-auth doesn't reset the UI
+  suppressAuthEvent = true;
   const { error: signInErr } = await sb.auth.signInWithPassword({ email: user.email, password: cur });
+  suppressAuthEvent = false;
   if (signInErr) { err.textContent='Current password is incorrect.'; err.style.display='block'; return; }
 
   const { error } = await sb.auth.updateUser({ password: nw });
@@ -1020,6 +1102,75 @@ function showToast(icon, msg) {
 
 init();
 
+// ── OFFLINE DETECTION ──────────────────────────
+(function () {
+  const overlay = document.getElementById('offlineOverlay');
+  function showOffline() { overlay.style.display = 'flex'; }
+  function hideOffline() { overlay.style.display = 'none'; }
+  if (!navigator.onLine) showOffline();
+  window.addEventListener('offline', showOffline);
+  window.addEventListener('online',  hideOffline);
+})();
+
+// ── PWA INSTALL BANNER ─────────────────────────
+(function () {
+  // Don't show if already installed (running in standalone/fullscreen)
+  const isInstalled = window.matchMedia('(display-mode: standalone)').matches
+    || window.navigator.standalone === true;
+  if (isInstalled) return;
+
+  const DISMISSED_KEY = 'aisha_install_dismissed';
+
+  // ── Android / Chrome — beforeinstallprompt ──
+  let deferredPrompt = null;
+  window.addEventListener('beforeinstallprompt', e => {
+    e.preventDefault();
+    deferredPrompt = e;
+    if (!localStorage.getItem(DISMISSED_KEY)) {
+      setTimeout(() => {
+        document.getElementById('installBanner').classList.add('visible');
+      }, 3000); // slight delay so it doesn't appear instantly on load
+    }
+  });
+
+  window.doInstallPWA = async function () {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    deferredPrompt = null;
+    document.getElementById('installBanner').classList.remove('visible');
+    if (outcome === 'accepted') {
+      localStorage.setItem(DISMISSED_KEY, '1');
+    }
+  };
+
+  window.dismissInstallBanner = function () {
+    document.getElementById('installBanner').classList.remove('visible');
+    localStorage.setItem(DISMISSED_KEY, '1');
+  };
+
+  // ── iOS Safari — no beforeinstallprompt, show manual instructions ──
+  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+  if (isIOS && isSafari && !localStorage.getItem(DISMISSED_KEY)) {
+    setTimeout(() => {
+      document.getElementById('iosInstallBanner').classList.add('visible');
+    }, 4000);
+  }
+
+  window.dismissIOSBanner = function () {
+    document.getElementById('iosInstallBanner').classList.remove('visible');
+    localStorage.setItem(DISMISSED_KEY, '1');
+  };
+
+  // Hide banner once installed
+  window.addEventListener('appinstalled', () => {
+    document.getElementById('installBanner').classList.remove('visible');
+    localStorage.setItem(DISMISSED_KEY, '1');
+  });
+})();
+
+// ── SERVICE WORKER ─────────────────────────────
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('/sw.js').catch(() => {});

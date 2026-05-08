@@ -77,4 +77,18 @@ CREATE POLICY "storage_photos_public_read"
   USING (bucket_id = 'photos');
 
 -- Only service role (admin function) can upload/delete
--- (handled by your Netlify Function using service_role key)
+-- (handled by your Netlify/Vercel Function using service_role key)
+
+-- ── 6. LIKE COUNT RPC (run this too!) ─────────────────
+-- Allows authenticated users to increment/decrement photo likes
+-- without needing a direct UPDATE policy on the photos table.
+CREATE OR REPLACE FUNCTION public.increment_photo_likes(photo_id TEXT, delta INTEGER)
+RETURNS void AS $$
+BEGIN
+  UPDATE public.photos
+  SET likes = GREATEST(0, likes + delta)
+  WHERE id = photo_id;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+GRANT EXECUTE ON FUNCTION public.increment_photo_likes(TEXT, INTEGER) TO authenticated;
